@@ -33,7 +33,7 @@ void showContent(void) {
 	cout << "TPMS device and generates log files on" << endl;
 	cout << "every new data input" << endl;
 	cout << "All stored data will be available for" << endl;
-	cout << "the user in the /var/log/tpms/ directory." << endl;
+	cout << "the user in the TPMS database." << endl;
 	cout << "\n\n\nUsage:" << endl;
 	cout << "com.K2On.tpms DEVICE" << endl;
 	exit(0);
