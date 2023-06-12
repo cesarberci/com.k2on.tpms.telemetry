@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>com.K2On.tpms</name>
+	<name>com.K2On.tpms.telemetry</name>
 	<comment></comment>
 	<projects>
 		<project>CppUTest</project>

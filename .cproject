@@ -76,6 +76,8 @@
                                     <listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="pthread"/>
                                     									
                                     <listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="curl"/>
+                                    									
+                                    <listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="mysqlclient"/>
                                     								
                                 </option>
                                 								

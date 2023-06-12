@@ -38,19 +38,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: com.K2On.tpms
+all: com.K2On.tpms.telemetry
 
 # Tool invocations
-com.K2On.tpms: $(OBJS) $(USER_OBJS)
+com.K2On.tpms.telemetry: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross G++ Linker'
-	arm-linux-gnueabihf-g++  -o "com.K2On.tpms" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-linux-gnueabihf-g++  -o "com.K2On.tpms.telemetry" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(C_DEPS)$(CPP_DEPS) com.K2On.tpms
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(EXECUTABLES)$(OBJS)$(C_UPPER_DEPS)$(CXX_DEPS)$(C_DEPS)$(CPP_DEPS) com.K2On.tpms.telemetry
 	-@echo ' '
 
 .PHONY: all clean dependents
