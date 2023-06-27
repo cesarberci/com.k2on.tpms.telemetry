@@ -16,14 +16,17 @@
 #include <sstream>
 #include <map>
 #include <thread>
-#include <stack>
+#include <queue>
+#include <mutex>
 
 #include "src/DBDataExanger.h"
 #include "src/TelemetrySender.h"
 
 using namespace std;
 using namespace src;
-std::stack<std::string> messageStack;
+
+std::queue<std::string> messageStack;
+mutex mtx;
 
 void showContent(void) {
 	cout << "****   TPMS TELEMETRY  ****" << endl;
@@ -36,9 +39,8 @@ void showContent(void) {
 
 void tpms_callback(int result, std::string message) {
 	if (result != 0) {
-		if (result != 0) {
-			messageStack.push(message);
-		}
+		lock_guard<mutex> lock(mtx);
+		messageStack.push(message);
 	}
 }
 
@@ -62,27 +64,28 @@ int main(int argc, char *argv[]) {
 			//std::cout << "New record detected. ID: " << newMaxId << std::endl;
 			maxId = newMaxId;  // Update the max ID
 
-			std::map<std::string, std::string> logData = db->getLogById(maxId);
-			std::string deviceId = db->getDeviceId();
+						std::map<std::string, std::string> logData = db->getLogById(maxId);
+						std::string deviceId = db->getDeviceId();
 
-			std::stringstream ss;
-			ss << "{\"Device\": \"" << deviceId << "\", \"TrailerPosition\": "
-					<< logData["TrailerPosition"] << ", \"Tire\": "
-					<< logData["TireID"] << ", \"Temperature\": "
-					<< logData["Temperature"] << ", \"Pressure\": "
-					<< logData["Pressure"] << ", \"StatusByte\": "
-					<< logData["StatusByte"] << ", \"TimeStamp\" : \""
-					<< logData["TimeStamp"] << "\"}";
+						std::stringstream ss;
+						ss << "{\"Device\": \"" << deviceId << "\", \"TrailerPosition\": "
+								<< logData["TrailerPosition"] << ", \"Tire\": "
+								<< logData["TireID"] << ", \"Temperature\": "
+								<< logData["Temperature"] << ", \"Pressure\": "
+								<< logData["Pressure"] << ", \"StatusByte\": "
+								<< logData["StatusByte"] << ", \"TimeStamp\" : \""
+								<< logData["TimeStamp"] << "\"}";
 
-			std::string jsonMessage = ss.str();
-			//std::cout << "JSON Message: " << jsonMessage << std::endl;
-			sender.send("tpms", jsonMessage, tpms_callback);
+						std::string jsonMessage = ss.str();
+						//std::cout << "JSON Message: " << jsonMessage << std::endl;
+						sender.send("tpms", jsonMessage, tpms_callback);
 		}
 
 		if (!messageStack.empty()) {
-			std::string message = messageStack.top();
-			sender.send("tpms", message, tpms_callback);
+			lock_guard<mutex> lock(mtx);
+			std::string message = messageStack.front();
 			messageStack.pop();
+			sender.send("tpms", message, tpms_callback);
 		}
 	}
 	return 0;
