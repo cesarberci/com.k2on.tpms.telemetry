@@ -1,1 +1,5 @@
-/Debug/
+# Ignorar tudo no diretório Debug
+Debug/*
+
+# Exceto o arquivo com.K2On.telemetry
+!Debug/com.K2On.telemetry
